@@ -1,13 +1,12 @@
 #!/bin/sh
 
 # Package
-PACKAGE="node"
-DNAME="Node.js"
+PACKAGE="jupp"
+DNAME="jupp"
 
 # Others
 INSTALL_DIR="/usr/local/${PACKAGE}"
-PATH="${INSTALL_DIR}/bin:${PATH}"
-
+BINS="jmacs  joe  jpico  jstar  jupp  rjoe  termidx"
 
 preinst ()
 {
@@ -19,8 +18,11 @@ postinst ()
     # Link
     ln -s ${SYNOPKG_PKGDEST} ${INSTALL_DIR}
 
-    # Correct the files ownership
-    chown -R root:root ${SYNOPKG_PKGDEST}
+    # Create symlinks for all binaries in the PATH
+    mkdir -p /usr/local/bin
+    for bin in $BINS; do
+        ln -s ${INSTALL_DIR}/bin/$bin /usr/local/bin/$bin
+    done
 
     exit 0
 }
@@ -34,7 +36,9 @@ postuninst ()
 {
     # Remove link
     rm -f ${INSTALL_DIR}
-
+    for bin in $BINS; do
+        rm -f /usr/local/bin/$bin
+    done
     exit 0
 }
 

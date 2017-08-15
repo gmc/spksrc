@@ -8,6 +8,7 @@ DNAME="SABnzbd Testing"
 INSTALL_DIR="/usr/local/${PACKAGE}"
 PYTHON_DIR="/usr/local/python"
 PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${PATH}"
+USER="sabnzbd-testing"
 PYTHON="${INSTALL_DIR}/env/bin/python"
 BUILDNUMBER="$(/bin/get_key_value /etc.defaults/VERSION buildnumber)"
 SABNZBD="${INSTALL_DIR}/share/SABnzbd/SABnzbd.py"
@@ -22,7 +23,7 @@ USER="$([ "${BUILDNUMBER}" -ge "7321" ] && echo -n ${SC_USER} || echo -n ${LEGAC
 
 start_daemon ()
 {
-    su ${USER} -s /bin/sh -c "PATH=${PATH} ${PYTHON} ${SABNZBD} -f ${CFG_FILE} --pidfile ${PID_FILE} -d"
+    su ${USER} -c "PATH=${PATH} ${PYTHON} ${SABNZBD} -f ${CFG_FILE} --pidfile ${PID_FILE} -d"
 }
 
 stop_daemon ()
